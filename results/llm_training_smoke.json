@@ -1,0 +1,70 @@
+{
+ "args": {
+  "model": "Qwen/Qwen3-0.6B",
+  "adapter": null,
+  "split": "training",
+  "augs": 2,
+  "max_tokens": 8192,
+  "batch_size": 8,
+  "limit": 5,
+  "tag": "smoke",
+  "seed": 0
+ },
+ "score": 0.0,
+ "seconds": 43.70022041210905,
+ "tasks": [
+  {
+   "task": "00576224",
+   "score": 0.0,
+   "valid": 2,
+   "top_votes": [
+    [
+     1,
+     1
+    ]
+   ]
+  },
+  {
+   "task": "007bbfb7",
+   "score": 0.0,
+   "valid": 1,
+   "top_votes": [
+    [
+     1
+    ]
+   ]
+  },
+  {
+   "task": "009d5c81",
+   "score": 0.0,
+   "valid": 2,
+   "top_votes": [
+    [
+     1,
+     1
+    ]
+   ]
+  },
+  {
+   "task": "00d62c1b",
+   "score": 0.0,
+   "valid": 2,
+   "top_votes": [
+    [
+     1,
+     1
+    ]
+   ]
+  },
+  {
+   "task": "00dbd492",
+   "score": 0.0,
+   "valid": 1,
+   "top_votes": [
+    [
+     1
+    ]
+   ]
+  }
+ ]
+}

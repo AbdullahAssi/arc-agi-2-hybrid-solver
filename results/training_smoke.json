@@ -1,0 +1,384 @@
+{
+ "args": {
+  "split": "training",
+  "max_depth": 3,
+  "max_nodes": 3000,
+  "time_limit": 60.0,
+  "limit": 40,
+  "tag": "smoke",
+  "workers": null
+ },
+ "score": 5.0,
+ "tasks": [
+  {
+   "task": "00576224",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 7.51
+  },
+  {
+   "task": "007bbfb7",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 9.83
+  },
+  {
+   "task": "009d5c81",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 36.14
+  },
+  {
+   "task": "00d62c1b",
+   "score": 1.0,
+   "fit_train": true,
+   "programs": [
+    "fill_holes"
+   ],
+   "nodes": 3000,
+   "first_hit": 21,
+   "seconds": 15.36
+  },
+  {
+   "task": "00dbd492",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 11.06
+  },
+  {
+   "task": "017c7c7b",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 9.74
+  },
+  {
+   "task": "025d127b",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 15.16
+  },
+  {
+   "task": "03560426",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 24.11
+  },
+  {
+   "task": "045e512c",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 13.93
+  },
+  {
+   "task": "0520fde7",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 14.48
+  },
+  {
+   "task": "05269061",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 13.28
+  },
+  {
+   "task": "05a7bcf2",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 39.12
+  },
+  {
+   "task": "05f2a901",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 17.29
+  },
+  {
+   "task": "0607ce86",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 30.9
+  },
+  {
+   "task": "0692e18c",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 4.48
+  },
+  {
+   "task": "06df4c85",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 11.32
+  },
+  {
+   "task": "070dd51e",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 14.34
+  },
+  {
+   "task": "08ed6ac7",
+   "score": 1.0,
+   "fit_train": true,
+   "programs": [
+    "color_by_size_rank"
+   ],
+   "nodes": 3000,
+   "first_hit": 31,
+   "seconds": 8.97
+  },
+  {
+   "task": "09629e4f",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 28.64
+  },
+  {
+   "task": "0962bcdd",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 16.7
+  },
+  {
+   "task": "09c534e7",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 35.17
+  },
+  {
+   "task": "0a1d4ef5",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 56.82
+  },
+  {
+   "task": "0a2355a6",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 11.14
+  },
+  {
+   "task": "0a938d79",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 2528,
+   "first_hit": null,
+   "seconds": 5.75
+  },
+  {
+   "task": "0b148d64",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 17.67
+  },
+  {
+   "task": "0b17323b",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 8.68
+  },
+  {
+   "task": "0bb8deee",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 11.64
+  },
+  {
+   "task": "0becf7df",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 28.86
+  },
+  {
+   "task": "0c786b71",
+   "score": 1.0,
+   "fit_train": true,
+   "programs": [
+    "rot180 > mirror_4"
+   ],
+   "nodes": 3000,
+   "first_hit": 84,
+   "seconds": 13.95
+  },
+  {
+   "task": "0c9aba6e",
+   "score": 1.0,
+   "fit_train": true,
+   "programs": [
+    "logic_or"
+   ],
+   "nodes": 3000,
+   "first_hit": 36,
+   "seconds": 23.02
+  },
+  {
+   "task": "0ca9ddb6",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 15.45
+  },
+  {
+   "task": "0d3d703e",
+   "score": 1.0,
+   "fit_train": true,
+   "programs": [
+    "identity"
+   ],
+   "nodes": 3000,
+   "first_hit": 1,
+   "seconds": 4.85
+  },
+  {
+   "task": "0d87d2a6",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 14.16
+  },
+  {
+   "task": "0e206a2e",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 18.72
+  },
+  {
+   "task": "0e671a1a",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 15.75
+  },
+  {
+   "task": "0f63c0b9",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 17.48
+  },
+  {
+   "task": "103eff5b",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 15.93
+  },
+  {
+   "task": "10fcaaa3",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 7.04
+  },
+  {
+   "task": "11852cab",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 16.67
+  },
+  {
+   "task": "1190bc91",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 3000,
+   "first_hit": null,
+   "seconds": 21.07
+  }
+ ]
+}

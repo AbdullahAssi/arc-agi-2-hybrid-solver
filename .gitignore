@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv*/
+.ipynb_checkpoints/
+# ARC data and generated training rows (clone arcprize/ARC-AGI-2 into data/arc-agi-2)
+data/
+# LoRA adapters are large and live on the GPU server; only the small DSL priors are kept
+models/*
+!models/prior_*.joblib
+# raw vLLM logs (progress bars); every run's results are in the JSON files
+results/llm_eval_*.log
+results/llm_zeroshot.log

@@ -1,0 +1,1096 @@
+{
+ "args": {
+  "split": "evaluation",
+  "max_depth": 4,
+  "max_nodes": 5000,
+  "time_limit": 300.0,
+  "prior": "models/prior_dream_v2.joblib",
+  "holdout": false,
+  "limit": null,
+  "tag": "v2_d4_dream",
+  "workers": 100
+ },
+ "score": 0.0,
+ "tasks": [
+  {
+   "task": "0934a4d8",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 108.63
+  },
+  {
+   "task": "135a2760",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 37.86
+  },
+  {
+   "task": "136b0064",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 39.73
+  },
+  {
+   "task": "13e47133",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 45.44
+  },
+  {
+   "task": "142ca369",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 52.02
+  },
+  {
+   "task": "16b78196",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 62.43
+  },
+  {
+   "task": "16de56c4",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 45.69
+  },
+  {
+   "task": "1818057f",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 31.25
+  },
+  {
+   "task": "195c6913",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 45.85
+  },
+  {
+   "task": "1ae2feb7",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 49.25
+  },
+  {
+   "task": "20270e3b",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 20.54
+  },
+  {
+   "task": "20a9e565",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 51.91
+  },
+  {
+   "task": "21897d95",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 45.81
+  },
+  {
+   "task": "221dfab4",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 45.88
+  },
+  {
+   "task": "247ef758",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 63.04
+  },
+  {
+   "task": "269e22fb",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 30.96
+  },
+  {
+   "task": "271d71e2",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 34.71
+  },
+  {
+   "task": "28a6681f",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 42.55
+  },
+  {
+   "task": "291dc1e1",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 35.78
+  },
+  {
+   "task": "2b83f449",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 35.24
+  },
+  {
+   "task": "2ba387bc",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 60.8
+  },
+  {
+   "task": "2c181942",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 44.09
+  },
+  {
+   "task": "2d0172a1",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 35.21
+  },
+  {
+   "task": "31f7f899",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 45.76
+  },
+  {
+   "task": "332f06d7",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 46.53
+  },
+  {
+   "task": "35ab12c3",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 51.07
+  },
+  {
+   "task": "36a08778",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 44.34
+  },
+  {
+   "task": "38007db0",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 33.2
+  },
+  {
+   "task": "3a25b0d8",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 44.27
+  },
+  {
+   "task": "3dc255db",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 45.73
+  },
+  {
+   "task": "3e6067c3",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 67.35
+  },
+  {
+   "task": "409aa875",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 40.34
+  },
+  {
+   "task": "446ef5d2",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 43.26
+  },
+  {
+   "task": "45a5af55",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 21.65
+  },
+  {
+   "task": "4a21e3da",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 46.92
+  },
+  {
+   "task": "4c3d4a41",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 39.4
+  },
+  {
+   "task": "4c416de3",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 50.86
+  },
+  {
+   "task": "4c7dc4dd",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 70.95
+  },
+  {
+   "task": "4e34c42c",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 48.1
+  },
+  {
+   "task": "53fb4810",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 44.12
+  },
+  {
+   "task": "5545f144",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 21.49
+  },
+  {
+   "task": "581f7754",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 46.28
+  },
+  {
+   "task": "58490d8a",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 53.85
+  },
+  {
+   "task": "58f5dbd5",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 56.43
+  },
+  {
+   "task": "5961cc34",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 40.25
+  },
+  {
+   "task": "5dbc8537",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 37.77
+  },
+  {
+   "task": "62593bfd",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 59.96
+  },
+  {
+   "task": "64efde09",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 55.57
+  },
+  {
+   "task": "65b59efc",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 46.15
+  },
+  {
+   "task": "67e490f4",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 48.14
+  },
+  {
+   "task": "6e453dd6",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 28.75
+  },
+  {
+   "task": "6e4f6532",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 46.2
+  },
+  {
+   "task": "6ffbe589",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 34.6
+  },
+  {
+   "task": "71e489b6",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 31.11
+  },
+  {
+   "task": "7491f3cf",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 38.23
+  },
+  {
+   "task": "7666fa5d",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 27.0
+  },
+  {
+   "task": "78332cb0",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 34.5
+  },
+  {
+   "task": "7b0280bc",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 52.38
+  },
+  {
+   "task": "7b3084d4",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 53.82
+  },
+  {
+   "task": "7b5033c1",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 21.82
+  },
+  {
+   "task": "7b80bb43",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 32.85
+  },
+  {
+   "task": "7c66cb00",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 66.3
+  },
+  {
+   "task": "7ed72f31",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 56.14
+  },
+  {
+   "task": "800d221b",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 54.3
+  },
+  {
+   "task": "80a900e0",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 26.68
+  },
+  {
+   "task": "8698868d",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 56.74
+  },
+  {
+   "task": "88bcf3b4",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 39.16
+  },
+  {
+   "task": "88e364bc",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 58.98
+  },
+  {
+   "task": "89565ca0",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 86.35
+  },
+  {
+   "task": "898e7135",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 34.83
+  },
+  {
+   "task": "8b7bacbf",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 61.52
+  },
+  {
+   "task": "8b9c3697",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 30.55
+  },
+  {
+   "task": "8e5c0c38",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 53.86
+  },
+  {
+   "task": "8f215267",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 60.32
+  },
+  {
+   "task": "8f3a5a89",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 31.56
+  },
+  {
+   "task": "9385bd28",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 50.03
+  },
+  {
+   "task": "97d7923e",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 53.69
+  },
+  {
+   "task": "981571dc",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 100.05
+  },
+  {
+   "task": "9aaea919",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 55.43
+  },
+  {
+   "task": "9bbf930d",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 62.01
+  },
+  {
+   "task": "a251c730",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 58.88
+  },
+  {
+   "task": "a25697e4",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 43.35
+  },
+  {
+   "task": "a32d8b75",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 55.24
+  },
+  {
+   "task": "a395ee82",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 40.16
+  },
+  {
+   "task": "a47bf94d",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 68.73
+  },
+  {
+   "task": "a6f40cea",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 44.86
+  },
+  {
+   "task": "aa4ec2a5",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 30.47
+  },
+  {
+   "task": "abc82100",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 31.82
+  },
+  {
+   "task": "b0039139",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 36.66
+  },
+  {
+   "task": "b10624e5",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 58.84
+  },
+  {
+   "task": "b5ca7ac4",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 63.36
+  },
+  {
+   "task": "b6f77b65",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 63.75
+  },
+  {
+   "task": "b99e7126",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 84.33
+  },
+  {
+   "task": "b9e38dc0",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 37.08
+  },
+  {
+   "task": "bf45cf4b",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 21.58
+  },
+  {
+   "task": "c4d067a0",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 61.23
+  },
+  {
+   "task": "c7f57c3e",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 55.56
+  },
+  {
+   "task": "cb2d8a2c",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 49.05
+  },
+  {
+   "task": "cbebaa4b",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 55.83
+  },
+  {
+   "task": "d35bdbdc",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 67.24
+  },
+  {
+   "task": "d59b0160",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 40.08
+  },
+  {
+   "task": "d8e07eb2",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 101.78
+  },
+  {
+   "task": "da515329",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 21.85
+  },
+  {
+   "task": "db0c5428",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 38.79
+  },
+  {
+   "task": "db695cfb",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 31.17
+  },
+  {
+   "task": "dbff022c",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 49.07
+  },
+  {
+   "task": "dd6b8c4b",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 41.03
+  },
+  {
+   "task": "de809cff",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 33.36
+  },
+  {
+   "task": "dfadab01",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 37.48
+  },
+  {
+   "task": "e12f9a14",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 54.21
+  },
+  {
+   "task": "e3721c99",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 60.67
+  },
+  {
+   "task": "e376de54",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 34.17
+  },
+  {
+   "task": "e8686506",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 24.93
+  },
+  {
+   "task": "e87109e9",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 40.22
+  },
+  {
+   "task": "edb79dae",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 33.03
+  },
+  {
+   "task": "eee78d87",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 19.72
+  },
+  {
+   "task": "f560132c",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 32.79
+  },
+  {
+   "task": "f931b4a8",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 23.74
+  },
+  {
+   "task": "faa9f03d",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 35.26
+  },
+  {
+   "task": "fc7cae8d",
+   "score": 0.0,
+   "fit_train": false,
+   "programs": [],
+   "nodes": 5000,
+   "first_hit": null,
+   "seconds": 29.51
+  }
+ ]
+}

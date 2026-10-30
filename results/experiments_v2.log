@@ -1,0 +1,127 @@
+nohup: ignoring input
+skip training_v2_uniform (exists)
+evaluation [v2_uniform]: score 0.00/120 (0.0%)  fit-train 0  false-positives 0  time 41s
+wrote results/evaluation_v2_uniform.json
+dream samples: 30000
+validation score (exact label-set match): 0.294
+wrote models/prior_dream_v2.joblib
+dream samples: 30000
+wake samples: 69 (x20)
+validation score (exact label-set match): 0.311
+wrote models/prior_wake_v2.joblib
+training [hold_d3_uniform]: score 15.00/184 (8.2%)  fit-train 20  false-positives 5  time 28s
+  0c786b71  1.00  nodes=91     rot180 > mirror_4
+  22168020  1.00  nodes=39     connect_pairs
+  2dc579da  1.00  nodes=42     odd_cell
+  31d5ba1a  1.00  nodes=34     logic_xor
+  4258a5f9  1.00  nodes=35     halo8
+  642d658d  1.00  nodes=256    largest_object > dominant_color
+  6fa7a44f  1.00  nodes=21     mirror_v
+  9172f3a0  1.00  nodes=17     upscale3
+  9565186b  1.00  nodes=1      identity
+  c0f76784  1.00  nodes=30     fill_holes
+  d511f180  1.00  nodes=1      identity
+  d9fac9be  1.00  nodes=11     smallest_object
+  e345f17b  1.00  nodes=34     logic_or
+  e3497940  1.00  nodes=546    symmetrize_h > left_half
+  e729b7be  1.00  nodes=19     symmetrize_rot
+wrote results/training_hold_d3_uniform.json
+training [hold_d3_dream]: score 15.00/184 (8.2%)  fit-train 20  false-positives 5  time 28s
+  0c786b71  1.00  nodes=8      rot180 > mirror_4
+  22168020  1.00  nodes=4      connect_pairs
+  2dc579da  1.00  nodes=44     odd_cell
+  31d5ba1a  1.00  nodes=3      logic_xor
+  4258a5f9  1.00  nodes=2      halo8
+  642d658d  1.00  nodes=4      largest_object > dominant_color
+  6fa7a44f  1.00  nodes=2      mirror_v
+  9172f3a0  1.00  nodes=2      upscale3
+  9565186b  1.00  nodes=1      identity
+  c0f76784  1.00  nodes=3      fill_holes
+  d511f180  1.00  nodes=1      identity
+  d9fac9be  1.00  nodes=3      smallest_object
+  e345f17b  1.00  nodes=4      logic_nor
+  e3497940  1.00  nodes=481    symmetrize_h > left_half
+  e729b7be  1.00  nodes=2      symmetrize_rot
+wrote results/training_hold_d3_dream.json
+training [hold_d3_wake]: score 15.00/184 (8.2%)  fit-train 20  false-positives 5  time 27s
+  0c786b71  1.00  nodes=4      rot180 > mirror_4
+  22168020  1.00  nodes=2      connect_pairs
+  2dc579da  1.00  nodes=62     odd_cell
+  31d5ba1a  1.00  nodes=3      logic_xor
+  4258a5f9  1.00  nodes=2      halo8
+  642d658d  1.00  nodes=4      largest_object > dominant_color
+  6fa7a44f  1.00  nodes=2      mirror_v
+  9172f3a0  1.00  nodes=3      upscale3
+  9565186b  1.00  nodes=1      identity
+  c0f76784  1.00  nodes=3      fill_holes
+  d511f180  1.00  nodes=1      identity
+  d9fac9be  1.00  nodes=3      smallest_object
+  e345f17b  1.00  nodes=3      logic_or
+  e3497940  1.00  nodes=224    symmetrize_h > left_half
+  e729b7be  1.00  nodes=2      symmetrize_rot
+wrote results/training_hold_d3_wake.json
+training [hold_d4_uniform]: score 15.00/184 (8.2%)  fit-train 20  false-positives 5  time 167s
+  0c786b71  1.00  nodes=91     rot180 > mirror_4
+  22168020  1.00  nodes=39     connect_pairs
+  2dc579da  1.00  nodes=42     odd_cell
+  31d5ba1a  1.00  nodes=34     logic_xor
+  4258a5f9  1.00  nodes=35     halo8
+  642d658d  1.00  nodes=256    largest_object > dominant_color
+  6fa7a44f  1.00  nodes=21     mirror_v
+  9172f3a0  1.00  nodes=17     upscale3
+  9565186b  1.00  nodes=1      identity
+  c0f76784  1.00  nodes=30     fill_holes
+  d511f180  1.00  nodes=1      identity
+  d9fac9be  1.00  nodes=11     smallest_object
+  e345f17b  1.00  nodes=34     logic_or
+  e3497940  1.00  nodes=546    symmetrize_h > left_half
+  e729b7be  1.00  nodes=19     symmetrize_rot
+wrote results/training_hold_d4_uniform.json
+training [hold_d4_dream]: score 15.00/184 (8.2%)  fit-train 20  false-positives 5  time 122s
+  0c786b71  1.00  nodes=8      rot180 > mirror_4
+  22168020  1.00  nodes=4      connect_pairs
+  2dc579da  1.00  nodes=47     odd_cell
+  31d5ba1a  1.00  nodes=3      logic_xor
+  4258a5f9  1.00  nodes=2      halo8
+  642d658d  1.00  nodes=4      largest_object > dominant_color
+  6fa7a44f  1.00  nodes=2      mirror_v
+  9172f3a0  1.00  nodes=2      upscale3
+  9565186b  1.00  nodes=1      identity
+  c0f76784  1.00  nodes=3      fill_holes
+  d511f180  1.00  nodes=1      identity
+  d9fac9be  1.00  nodes=3      smallest_object
+  e345f17b  1.00  nodes=4      logic_nor
+  e3497940  1.00  nodes=690    symmetrize_h > left_half
+  e729b7be  1.00  nodes=2      symmetrize_rot
+wrote results/training_hold_d4_dream.json
+evaluation [v2_d4_dream]: score 0.00/120 (0.0%)  fit-train 0  false-positives 0  time 124s
+wrote results/evaluation_v2_d4_dream.json
+            arm |        tasks |        score |         @100 |         @500 |        @2000 |        @5000 |       @20000 | median_nodes |    false_pos
+hold_d3_uniform |          184 |         15.0 |           13 |           14 |           15 |           15 |           15 |           34 |            5
+  hold_d3_dream |          184 |         15.0 |           14 |           15 |           15 |           15 |           15 |            3 |            5
+   hold_d3_wake |          184 |         15.0 |           14 |           15 |           15 |           15 |           15 |            3 |            5
+hold_d4_uniform |          184 |         15.0 |           13 |           14 |           15 |           15 |           15 |           34 |            5
+  hold_d4_dream |          184 |         15.0 |           14 |           14 |           15 |           15 |           15 |            3 |            5
+
+Tasks solved by all arms: 15
+  hold_d3_dream: geometric-mean node speed-up vs hold_d3_uniform = 5.9x
+  hold_d3_wake: geometric-mean node speed-up vs hold_d3_uniform = 6.6x
+  hold_d4_uniform: geometric-mean node speed-up vs hold_d3_uniform = 1.0x
+  hold_d4_dream: geometric-mean node speed-up vs hold_d3_uniform = 5.8x
+
+Per task (nodes to first solution):
+  0c786b71      91       8       4      91       8   rot180 > mirror_4
+  22168020      39       4       2      39       4   connect_pairs
+  2dc579da      42      44      62      42      47   odd_cell
+  31d5ba1a      34       3       3      34       3   logic_xor
+  4258a5f9      35       2       2      35       2   halo8
+  642d658d     256       4       4     256       4   largest_object > dominant_color
+  6fa7a44f      21       2       2      21       2   mirror_v
+  9172f3a0      17       2       3      17       2   upscale3
+  9565186b       1       1       1       1       1   identity
+  c0f76784      30       3       3      30       3   fill_holes
+  d511f180       1       1       1       1       1   identity
+  d9fac9be      11       3       3      11       3   smallest_object
+  e345f17b      34       4       3      34       4   logic_or
+  e3497940     546     481     224     546     690   symmetrize_h > left_half
+  e729b7be      19       2       2      19       2   symmetrize_rot

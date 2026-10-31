@@ -1,0 +1,33 @@
+train 6473  val 132  train tokens 13.1M
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   1%|          | 2/311 [00:00<00:23, 13.22it/s]Loading weights:  28%|██▊       | 87/311 [00:00<00:00, 416.92it/s]Loading weights:  53%|█████▎    | 166/311 [00:00<00:00, 568.31it/s]Loading weights:  78%|███████▊  | 244/311 [00:00<00:00, 646.03it/s]Loading weights: 100%|██████████| 311/311 [00:00<00:00, 583.97it/s]
+trainable params: 20,185,088 || all params: 616,235,008 || trainable%: 3.2756
+240 optimizer steps/epoch, running 240
+step 0 val_loss 0.1439
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+step 10/240 loss 0.1926 lr 9.17e-05 4456 tok/s  eta 46 min  mem 6.0GB
+step 20/240 loss 0.1875 lr 9.97e-05 4700 tok/s  eta 42 min  mem 6.0GB
+step 30/240 loss 0.1707 lr 9.85e-05 4799 tok/s  eta 40 min  mem 6.0GB
+step 40/240 loss 0.1958 lr 9.63e-05 4822 tok/s  eta 38 min  mem 6.0GB
+step 50/240 loss 0.1883 lr 9.33e-05 4846 tok/s  eta 36 min  mem 6.0GB
+step 60/240 loss 0.1857 lr 8.95e-05 4864 tok/s  eta 34 min  mem 6.5GB
+step 70/240 loss 0.1719 lr 8.49e-05 4876 tok/s  eta 32 min  mem 6.5GB
+step 80/240 loss 0.1529 lr 7.96e-05 4879 tok/s  eta 30 min  mem 6.5GB
+step 90/240 loss 0.1695 lr 7.38e-05 4881 tok/s  eta 28 min  mem 6.5GB
+step 100/240 loss 0.1655 lr 6.75e-05 4891 tok/s  eta 26 min  mem 6.5GB
+step 110/240 loss 0.1527 lr 6.09e-05 4898 tok/s  eta 24 min  mem 6.5GB
+step 120/240 loss 0.1781 lr 5.41e-05 4905 tok/s  eta 22 min  mem 6.5GB
+step 130/240 loss 0.2159 lr 4.72e-05 4916 tok/s  eta 20 min  mem 6.5GB
+step 140/240 loss 0.1564 lr 4.04e-05 4920 tok/s  eta 18 min  mem 6.5GB
+step 150/240 loss 0.1413 lr 3.38e-05 4927 tok/s  eta 17 min  mem 6.5GB
+step 160/240 loss 0.1649 lr 2.74e-05 4917 tok/s  eta 15 min  mem 6.5GB
+step 170/240 loss 0.1507 lr 2.15e-05 4927 tok/s  eta 13 min  mem 6.5GB
+step 180/240 loss 0.1297 lr 1.61e-05 4935 tok/s  eta 11 min  mem 6.5GB
+step 190/240 loss 0.1519 lr 1.14e-05 4942 tok/s  eta 9 min  mem 6.5GB
+step 200/240 loss 0.1886 lr 7.40e-06 4949 tok/s  eta 7 min  mem 6.5GB
+step 210/240 loss 0.1604 lr 4.21e-06 4948 tok/s  eta 6 min  mem 6.5GB
+step 220/240 loss 0.1313 lr 1.89e-06 4955 tok/s  eta 4 min  mem 6.9GB
+step 230/240 loss 0.1705 lr 4.74e-07 4956 tok/s  eta 2 min  mem 6.9GB
+step 240/240 loss 0.1384 lr 0.00e+00 4955 tok/s  eta 0 min  mem 6.9GB
+step 240 val_loss 0.1111
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+saved adapter to models/lora_ttt_q06  (44 min)

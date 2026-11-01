@@ -1,0 +1,88 @@
+train 20182  val 411  train tokens 40.0M
+Loading weights:   0%|          | 0/311 [00:00<?, ?it/s]Loading weights:   0%|          | 1/311 [00:00<00:47,  6.50it/s]Loading weights:   1%|          | 2/311 [00:00<00:55,  5.61it/s]Loading weights:   9%|▉         | 28/311 [00:00<00:03, 85.32it/s]Loading weights:  20%|█▉        | 61/311 [00:00<00:01, 159.11it/s]Loading weights:  30%|███       | 94/311 [00:00<00:01, 208.68it/s]Loading weights:  41%|████      | 127/311 [00:00<00:00, 243.81it/s]Loading weights:  51%|█████     | 159/311 [00:00<00:00, 262.41it/s]Loading weights:  61%|██████    | 190/311 [00:00<00:00, 276.48it/s]Loading weights:  70%|███████   | 219/311 [00:01<00:00, 269.59it/s]Loading weights:  79%|███████▉  | 247/311 [00:01<00:00, 272.23it/s]Loading weights:  90%|████████▉ | 279/311 [00:01<00:00, 280.38it/s]Loading weights:  99%|█████████▉| 308/311 [00:01<00:00, 281.53it/s]Loading weights: 100%|██████████| 311/311 [00:01<00:00, 222.51it/s]
+trainable params: 34,865,152 || all params: 1,755,440,128 || trainable%: 1.9861
+762 optimizer steps/epoch, running 762
+step 0 val_loss 0.3747
+[transformers] `use_cache=True` is incompatible with gradient checkpointing. Setting `use_cache=False`.
+step 10/762 loss 0.4777 lr 5.79e-05 1814 tok/s  eta 348 min  mem 7.2GB
+step 20/762 loss 0.3496 lr 1.11e-04 2198 tok/s  eta 293 min  mem 8.0GB
+step 30/762 loss 0.2160 lr 1.63e-04 2355 tok/s  eta 273 min  mem 8.0GB
+step 40/762 loss 0.1800 lr 2.00e-04 2445 tok/s  eta 260 min  mem 8.0GB
+step 50/762 loss 0.1877 lr 2.00e-04 2512 tok/s  eta 248 min  mem 8.0GB
+step 60/762 loss 0.1974 lr 2.00e-04 2555 tok/s  eta 241 min  mem 8.1GB
+step 70/762 loss 0.1620 lr 1.99e-04 2583 tok/s  eta 234 min  mem 8.1GB
+step 80/762 loss 0.1948 lr 1.98e-04 2607 tok/s  eta 229 min  mem 8.1GB
+step 90/762 loss 0.1608 lr 1.97e-04 2632 tok/s  eta 224 min  mem 8.3GB
+step 100/762 loss 0.1816 lr 1.96e-04 2646 tok/s  eta 220 min  mem 8.3GB
+step 110/762 loss 0.1436 lr 1.95e-04 2661 tok/s  eta 215 min  mem 8.3GB
+step 120/762 loss 0.1523 lr 1.94e-04 2672 tok/s  eta 210 min  mem 8.3GB
+step 130/762 loss 0.1907 lr 1.92e-04 2682 tok/s  eta 206 min  mem 8.3GB
+step 140/762 loss 0.1944 lr 1.90e-04 2691 tok/s  eta 202 min  mem 8.3GB
+step 150/762 loss 0.1755 lr 1.88e-04 2697 tok/s  eta 198 min  mem 8.3GB
+step 160/762 loss 0.1452 lr 1.86e-04 2712 tok/s  eta 194 min  mem 8.3GB
+step 170/762 loss 0.1535 lr 1.84e-04 2719 tok/s  eta 190 min  mem 8.4GB
+step 180/762 loss 0.1471 lr 1.82e-04 2718 tok/s  eta 187 min  mem 8.4GB
+step 190/762 loss 0.1443 lr 1.79e-04 2726 tok/s  eta 183 min  mem 8.4GB
+step 200/762 loss 0.1581 lr 1.76e-04 2727 tok/s  eta 180 min  mem 8.4GB
+step 200 val_loss 0.1289
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+step 210/762 loss 0.1726 lr 1.73e-04 2670 tok/s  eta 181 min  mem 8.4GB
+step 220/762 loss 0.1799 lr 1.70e-04 2676 tok/s  eta 177 min  mem 8.4GB
+step 230/762 loss 0.1358 lr 1.67e-04 2685 tok/s  eta 173 min  mem 8.4GB
+step 240/762 loss 0.1406 lr 1.64e-04 2689 tok/s  eta 170 min  mem 8.4GB
+step 250/762 loss 0.1890 lr 1.61e-04 2696 tok/s  eta 166 min  mem 8.4GB
+step 260/762 loss 0.1448 lr 1.57e-04 2698 tok/s  eta 163 min  mem 8.4GB
+step 270/762 loss 0.1647 lr 1.53e-04 2702 tok/s  eta 159 min  mem 8.5GB
+step 280/762 loss 0.1508 lr 1.50e-04 2706 tok/s  eta 156 min  mem 8.5GB
+step 290/762 loss 0.1427 lr 1.46e-04 2712 tok/s  eta 152 min  mem 8.5GB
+step 300/762 loss 0.1490 lr 1.42e-04 2716 tok/s  eta 149 min  mem 8.5GB
+step 310/762 loss 0.1399 lr 1.38e-04 2720 tok/s  eta 145 min  mem 8.5GB
+step 320/762 loss 0.1800 lr 1.34e-04 2725 tok/s  eta 142 min  mem 8.5GB
+step 330/762 loss 0.1390 lr 1.30e-04 2727 tok/s  eta 139 min  mem 8.5GB
+step 340/762 loss 0.1460 lr 1.26e-04 2730 tok/s  eta 135 min  mem 8.5GB
+step 350/762 loss 0.1608 lr 1.22e-04 2730 tok/s  eta 132 min  mem 8.5GB
+step 360/762 loss 0.1566 lr 1.17e-04 2732 tok/s  eta 129 min  mem 8.5GB
+step 370/762 loss 0.1249 lr 1.13e-04 2733 tok/s  eta 126 min  mem 8.5GB
+step 380/762 loss 0.1476 lr 1.09e-04 2736 tok/s  eta 123 min  mem 8.5GB
+step 390/762 loss 0.1473 lr 1.04e-04 2737 tok/s  eta 119 min  mem 8.5GB
+step 400/762 loss 0.1473 lr 1.00e-04 2740 tok/s  eta 116 min  mem 8.5GB
+step 400 val_loss 0.1118
+step 410/762 loss 0.1289 lr 9.57e-05 2710 tok/s  eta 114 min  mem 8.5GB
+step 420/762 loss 0.1393 lr 9.13e-05 2712 tok/s  eta 111 min  mem 8.5GB
+step 430/762 loss 0.1132 lr 8.70e-05 2715 tok/s  eta 107 min  mem 8.5GB
+step 440/762 loss 0.1510 lr 8.27e-05 2718 tok/s  eta 104 min  mem 8.5GB
+step 450/762 loss 0.1536 lr 7.85e-05 2720 tok/s  eta 101 min  mem 8.5GB
+step 460/762 loss 0.1488 lr 7.43e-05 2722 tok/s  eta 97 min  mem 8.5GB
+step 470/762 loss 0.1238 lr 7.01e-05 2726 tok/s  eta 94 min  mem 8.5GB
+step 480/762 loss 0.1140 lr 6.60e-05 2727 tok/s  eta 91 min  mem 8.5GB
+step 490/762 loss 0.1930 lr 6.19e-05 2729 tok/s  eta 88 min  mem 8.5GB
+step 500/762 loss 0.1173 lr 5.80e-05 2732 tok/s  eta 84 min  mem 8.5GB
+step 510/762 loss 0.1232 lr 5.41e-05 2734 tok/s  eta 81 min  mem 8.5GB
+step 520/762 loss 0.1053 lr 5.03e-05 2736 tok/s  eta 78 min  mem 8.5GB
+step 530/762 loss 0.1386 lr 4.65e-05 2738 tok/s  eta 74 min  mem 8.5GB
+step 540/762 loss 0.1260 lr 4.29e-05 2740 tok/s  eta 71 min  mem 8.5GB
+step 550/762 loss 0.1200 lr 3.94e-05 2741 tok/s  eta 68 min  mem 8.5GB
+step 560/762 loss 0.1074 lr 3.60e-05 2743 tok/s  eta 65 min  mem 8.5GB
+step 570/762 loss 0.1132 lr 3.27e-05 2746 tok/s  eta 61 min  mem 8.5GB
+step 580/762 loss 0.1109 lr 2.96e-05 2749 tok/s  eta 58 min  mem 8.5GB
+step 590/762 loss 0.1326 lr 2.66e-05 2750 tok/s  eta 55 min  mem 8.5GB
+step 600/762 loss 0.1447 lr 2.37e-05 2753 tok/s  eta 52 min  mem 8.5GB
+step 600 val_loss 0.1001
+step 610/762 loss 0.1219 lr 2.10e-05 2732 tok/s  eta 49 min  mem 8.5GB
+step 620/762 loss 0.1254 lr 1.84e-05 2734 tok/s  eta 46 min  mem 8.5GB
+step 630/762 loss 0.0945 lr 1.60e-05 2736 tok/s  eta 42 min  mem 8.5GB
+step 640/762 loss 0.1399 lr 1.37e-05 2738 tok/s  eta 39 min  mem 8.5GB
+step 650/762 loss 0.1242 lr 1.16e-05 2739 tok/s  eta 36 min  mem 8.5GB
+step 660/762 loss 0.1116 lr 9.64e-06 2742 tok/s  eta 33 min  mem 8.5GB
+step 670/762 loss 0.1291 lr 7.86e-06 2743 tok/s  eta 29 min  mem 8.5GB
+step 680/762 loss 0.1302 lr 6.26e-06 2744 tok/s  eta 26 min  mem 8.5GB
+step 690/762 loss 0.1220 lr 4.84e-06 2745 tok/s  eta 23 min  mem 9.5GB
+step 700/762 loss 0.1043 lr 3.60e-06 2747 tok/s  eta 20 min  mem 9.5GB
+step 710/762 loss 0.1133 lr 2.53e-06 2749 tok/s  eta 17 min  mem 9.5GB
+step 720/762 loss 0.1089 lr 1.66e-06 2750 tok/s  eta 13 min  mem 9.5GB
+step 730/762 loss 0.1171 lr 9.62e-07 2752 tok/s  eta 10 min  mem 9.5GB
+step 740/762 loss 0.1070 lr 4.55e-07 2753 tok/s  eta 7 min  mem 9.5GB
+step 750/762 loss 0.0966 lr 1.36e-07 2754 tok/s  eta 4 min  mem 9.5GB
+step 760/762 loss 0.1144 lr 3.77e-09 2755 tok/s  eta 1 min  mem 9.5GB
+step 762 val_loss 0.0983
+saved adapter to models/lora_q17  (244 min)

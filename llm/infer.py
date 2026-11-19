@@ -90,13 +90,31 @@ def rescore(engine, jobs, adapters, votes, top_k):
                 owners.append(adapter)
                 keys.append((k, cand))
     print(f"rescoring {len(prompts)} candidate views")
-    scores = {}
+    per_view = {}
     for key, lp in zip(keys, engine.logprob(prompts, targets, owners)):
-        scores[key] = scores.get(key, 0.0) + lp
+        per_view.setdefault(key, []).append(lp)
     order = {}
-    for (k, cand), total in scores.items():
-        order.setdefault(k, []).append((total, cand))
-    return {k: [c for _, c in sorted(v, key=lambda t: -t[0])] for k, v in order.items()}
+    for (k, cand), lps in per_view.items():
+        order.setdefault(k, []).append((sum(lps), cand))
+    return {k: [c for _, c in sorted(v, key=lambda t: -t[0])] for k, v in order.items()}, per_view
+
+
+def dump_pool(path, tasks, votes, per_view):
+    """Every rescored candidate with its votes and per-view log-probabilities, for offline ranking."""
+    rows = []
+    for (tid, ti), counter in votes.items():
+        y = tasks[tid]["test"][ti][1]
+        cands = []
+        for cand, n in counter.most_common():
+            if (k := ((tid, ti), cand)) not in per_view:
+                continue
+            shape, raw = cand
+            grid = np.frombuffer(raw, dtype=np.int8).reshape(shape)
+            cands.append({"grid": grid.tolist(), "votes": n, "logprobs": per_view[k],
+                          "correct": bool(y is not None and grid.shape == y.shape and np.array_equal(grid, y))})
+        rows.append({"task": tid, "test": ti, "candidates": cands})
+    path.write_text(json.dumps(rows))
+    print(f"wrote {path} ({sum(len(r['candidates']) for r in rows)} candidates)")
 
 
 def load_model(name, adapter=None):
@@ -197,6 +215,8 @@ def main():
     ap.add_argument("--samples", type=int, default=0,
                     help="vllm only: extra sampled completions per view, added to the candidate pool")
     ap.add_argument("--temperature", type=float, default=0.7)
+    ap.add_argument("--pool", action="store_true",
+                    help="with --rescore: also write every rescored candidate to results/llm_pool_<split>_<tag>.json")
     ap.add_argument("--limit", type=int)
     ap.add_argument("--tag", default="zeroshot")
     ap.add_argument("--seed", type=int, default=0)
@@ -231,7 +251,10 @@ def main():
 
     order, vote_total = None, None
     if args.rescore:
-        order = rescore(engine, jobs, adapters, votes, args.rescore)
+        order, per_view = rescore(engine, jobs, adapters, votes, args.rescore)
+        if args.pool:
+            RESULTS.mkdir(exist_ok=True)
+            dump_pool(RESULTS / f"llm_pool_{args.split}_{args.tag}.json", tasks, votes, per_view)
         vote_total = summarize(tasks, jobs, votes, valid)[1]
         print(f"by votes alone: {vote_total:.2f}/{len(tasks)}")
     rows, total = summarize(tasks, jobs, votes, valid, order)

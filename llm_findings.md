@@ -74,13 +74,42 @@ top two. Sampling adds some diversity, but likelihood ranking cannot tell the ri
 misses. One found answer is too few to call ranking the main bottleneck, but it is the first place
 where generation succeeded and selection failed.
 
+**11. The ranking failure is not a length bias; the model prefers the wrong answers.** Finding 10
+suggested a simple cause: a summed log-probability adds one negative term per cell, so smaller grids
+score higher, and on `2d0172a1` the top answers (9x11, 9x9) were smaller than the correct 9x13. To
+test it, the same run was repeated with every candidate rescored (up to 40 per test instead of the
+top 12; 39,120 candidate views, 3.1 h) and the whole pool saved with per-view log-probabilities
+(`infer --pool`, `results/llm_pool_evaluation_ttt_task_pool_q17.json`). Rankers were then compared
+offline (`python -m llm.rank`). The pool held the correct grid for 2 of 167 test inputs (`2d0172a1`
+again, and `8f215267`), so a perfect ranker would score 1.5/120. Every ranker tried scores 0:
+
+| Ranker | Score | Rank of correct (`2d0172a1`, `8f215267`) |
+|---|---|---|
+| votes | 0 | 5, 15 |
+| summed log-prob (the run's own) | 0 | 4, 14 |
+| log-prob per token | 0 | 4, 14 |
+| worst view, per token | 0 | 6, 22 |
+| any of the above, implied-shape candidates first | 0 | same |
+| oracle (correct anywhere in the pool) | 1.5 | – |
+
+Normalising by size changes nothing: on `2d0172a1` the correct grid is also the least likely per
+token of the top four (-0.052 against -0.021 for the 9x11 answer), and its output size is not
+fixed by the demonstrations (11x12, 5x5, 7x5, 9x11), so no shape filter applies. On `8f215267` all
+32 candidates are the right size and the top 13 are 2–8 cells from the answer; the correct grid
+trails the best by 14 nats summed over 8 views, under 2 per view. So the model is not mis-scored
+by a fixable artefact: its per-task adapter genuinely finds the near misses more likely, and among
+candidates a few cells apart its likelihood carries almost no signal. Better ranking alone would
+reach at most 1.5/120 here; generation, which got the right answer into the pool for 2 of 167
+inputs, is the larger bottleneck.
+
 ### What this suggests next
 Every step has moved the answers closer, but none has crossed into exact answers: ARC scores only
 grids with every cell right, and the last 1–10 cells are exactly the ones the rule changes.
-- **Better ranking, not more samples:** sampling found a correct grid that likelihood ranking then
-  discarded. Checking candidates against the demonstrations (does the same transformation reproduce
-  the demo outputs?) or scoring each candidate under every augmented view separately are the
-  natural next filters.
+- **Ranking needs a signal other than the model's own likelihood:** size normalisation and shape
+  filters were tried and do not help (finding 11). What remains is a check from outside the model,
+  such as having the DSL test whether a candidate is consistent with a transformation that also
+  reproduces the demo outputs. Even a perfect ranker reaches only 1.5/120 here, though, so this is
+  worth doing only alongside better generation.
 - **Larger models and far more data:** published LLM approaches use 4–8B models trained on
   hundreds of thousands of RE-ARC-style examples, against 1.7B and 20k here.
 - **Combine with the DSL:** the DSL is exact when one of its programs fits; the LLM's strength so far

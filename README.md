@@ -26,6 +26,7 @@ LLM's answer otherwise.
 | LLM, + per-task test-time training | – | **0.5** |
 | LLM 1.7B + RE-ARC data, + per-task test-time training | – | 0 (closest: 1 of 175 cells wrong) |
 | LLM 1.7B, + 4 sampled answers per view | – | 0 (correct grid among candidates for 1 of 167 tests) |
+| LLM 1.7B, every candidate rescored, 5 rankers compared | – | 0 (perfect ranker: 1.5) |
 | **Combined (DSL first, then LLM)** | – | **0.5** |
 
 The LLM was trained on the training split, so it is scored on the evaluation split only. The
@@ -52,8 +53,12 @@ These are small numbers: ARC-AGI-2 was designed to resist brute-force search, an
   cells, but none is exact; the half-solve from 0.6B did not survive a different random draw.
 - **Sampling found an answer that ranking threw away.** With 4 sampled answers per view, the exactly
   correct grid appears among the candidates for one test input (`2d0172a1`), but likelihood ranks it
-  below wrong-size answers. Generating more candidates is cheap; choosing among them is the open
-  problem. Details:
+  below wrong-size answers.
+- **The ranker was not the main problem.** Testing the obvious explanation, that summed likelihood
+  favours small grids, every candidate was rescored and five rankers compared offline. None helps:
+  normalised per token, the correct grids still rank 4th and 14th, below answers 2–8 cells away. A
+  perfect ranker would reach only 1.5/120, so generating the right answer at all (2 of 167 test
+  inputs) is the bigger bottleneck. Details:
   [llm_findings.md](llm_findings.md), [llm_analysis.ipynb](llm_analysis.ipynb).
 
 ## Layout
@@ -72,7 +77,8 @@ llm/               LLM solver
   data.py          leave-one-out training data (+ --ttt: from evaluation examples only)
   train.py         LoRA fine-tuning, loss on answer tokens only
   ttt.py           per-task test-time training: one adapter per task
-  infer.py         vLLM inference, augmentation voting, optional likelihood rescoring
+  infer.py         vLLM inference, augmentation voting, optional likelihood rescoring (--pool saves all candidates)
+  rank.py          offline comparison of rankers on a saved candidate pool
 run_vllm.sh        environment wrapper for vLLM
 combine.py         DSL + LLM -> Kaggle-format submission.json
 analyze.py, build_notebook.py, build_llm_notebook.py, taskstats.py   analysis and notebooks
@@ -100,6 +106,8 @@ python -m llm.train --model Qwen/Qwen3-1.7B --data data/llm_train_v2.jsonl --out
 python -m llm.ttt --model Qwen/Qwen3-1.7B --init-adapter models/lora_q17 --out models/ttt_tasks_q17  # ~2 h
 bash run_vllm.sh --model Qwen/Qwen3-1.7B --adapter models/lora_q17 --adapter-dir models/ttt_tasks_q17 --rescore 8 --tag ttt_task_q17
 bash run_vllm.sh --model Qwen/Qwen3-1.7B --adapter models/lora_q17 --adapter-dir models/ttt_tasks_q17 --samples 4 --rescore 12 --tag ttt_task_sample_q17
+bash run_vllm.sh --model Qwen/Qwen3-1.7B --adapter models/lora_q17 --adapter-dir models/ttt_tasks_q17 --samples 4 --rescore 40 --pool --tag ttt_task_pool_q17  # ~3 h
+python -m llm.rank results/llm_pool_evaluation_ttt_task_pool_q17.json
 
 # Combine and write a submission
 python combine.py --dsl results/evaluation_v2_uniform.json \
@@ -111,9 +119,9 @@ peft. Inference needs vLLM, kept in a separate environment because its torch bui
 
 ## Where it would go next
 
-- **The LLM side:** better selection among sampled candidates (check each against the
-  demonstrations, or score it under every augmented view separately), then larger models (4–8B)
-  and far more generated data, which is the scale published LLM approaches use.
+- **The LLM side:** generating the right answer more often comes first: larger models (4–8B) and
+  far more generated data, which is the scale published LLM approaches use. Ranking needs a signal
+  from outside the model's likelihood, since size normalisation and shape filters did not help.
 - **The DSL side:** object-wise combinators ("apply f to each object") and primitives parameterised
   by the examples, which is where the rules of the evaluation tasks live.
 - **Verification:** reject coincidental DSL fits (14 training tasks fit every example but fail the

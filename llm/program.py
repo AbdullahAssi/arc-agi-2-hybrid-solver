@@ -13,6 +13,7 @@ Appends one JSON line per task to results/prog_<split>_<tag>.jsonl (resumable), 
 """
 import argparse
 import json
+import os
 import random
 import re
 import subprocess
@@ -71,9 +72,13 @@ def _limit_memory():
 def run_program(code, inputs, timeout=10.0):
     """Outputs of transform() on each input (a grid, or an error string), or one error for the whole program."""
     job = json.dumps({"code": code, "inputs": [g.tolist() for g in inputs]})
+    # One BLAS thread: on a many-core machine OpenBLAS reserves memory per core, and under the memory
+    # cap `import numpy` then hangs until the timeout
+    env = {**os.environ, "OPENBLAS_NUM_THREADS": "1", "OMP_NUM_THREADS": "1", "MKL_NUM_THREADS": "1"}
     try:
         proc = subprocess.run([sys.executable, "-I", "-c", RUNNER], input=job, capture_output=True, text=True,
-                              timeout=timeout, preexec_fn=_limit_memory if sys.platform != "win32" else None)
+                              timeout=timeout, env=env,
+                              preexec_fn=_limit_memory if sys.platform != "win32" else None)
     except subprocess.TimeoutExpired:
         return f"timed out after {timeout:.0f}s"
     try:

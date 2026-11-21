@@ -1,12 +1,14 @@
 """Combine the DSL search and the LLM into one solver and write a Kaggle-format submission.
 
 Rule: when the DSL found a program that fits every train pair (right 93 times out of 107 on the
-training split), its predictions come first; the LLM's top-voted grids fill the remaining
-attempts; with neither, the test input is echoed. DSL predictions are recomputed only for the
-tasks the saved DSL run fitted, so this takes seconds.
+training split), its predictions come first; then an LLM-written program that reproduced every
+demonstration (--prog, from llm.program); then the LLM's top-voted grids; then the best-effort
+LLM-written program; with none of these, the test input is echoed. DSL predictions are recomputed
+only for the tasks the saved DSL run fitted, so this takes seconds.
 
 Usage: python combine.py --split evaluation --dsl results/evaluation_v2_uniform.json
-                         --llm results/llm_evaluation_ttt_task_q06.json --out results/submission_evaluation.json
+                         --llm results/llm_evaluation_ttt_task_q06.json [--prog results/prog_evaluation_<tag>.jsonl]
+                         --out results/submission_evaluation.json
 """
 import argparse
 import json
@@ -23,12 +25,18 @@ def main():
     ap.add_argument("--split", default="evaluation", choices=["training", "evaluation"])
     ap.add_argument("--dsl", default="results/evaluation_v2_uniform.json")
     ap.add_argument("--llm", default="results/llm_evaluation_ttt_task_q06.json")
+    ap.add_argument("--prog", help="LLM-written programs (results/prog_<split>_<tag>.jsonl from llm.program)")
     ap.add_argument("--out", default="results/submission_evaluation.json")
     args = ap.parse_args()
 
     tasks = load_split(args.split)
     dsl = json.load(open(args.dsl))
     llm = {t["task"]: t["tests"] for t in json.load(open(args.llm))["tasks"]}
+    prog = {r["task"]: r for r in map(json.loads, open(args.prog))} if args.prog else {}
+
+    def prog_grids(tid, ti, field):
+        grids = prog.get(tid, {}).get(field) or []
+        return [np.array(grids[ti])] if ti < len(grids) and grids[ti] is not None else []
     search = {k: dsl["args"][k] for k in ("max_depth", "max_nodes", "time_limit")}
 
     submission, sources, score = {}, Counter(), 0.0
@@ -38,7 +46,11 @@ def main():
         entries, hits = [], []
         for ti, (x, y) in enumerate(task["test"]):
             llm_attempts = [np.array(a) for a in llm[tid][ti]["attempts"]] if tid in llm else []
-            ranked = [("dsl", a) for a in dsl_attempts[ti]] + [("llm", a) for a in llm_attempts] + [("copy", x)]
+            ranked = ([("dsl", a) for a in dsl_attempts[ti]]
+                      + [("prog", a) for a in prog_grids(tid, ti, "predictions")]
+                      + [("llm", a) for a in llm_attempts]
+                      + [("prog-fallback", a) for a in prog_grids(tid, ti, "fallback")]
+                      + [("copy", x)])
             chosen = []
             for src, a in ranked:  # first two distinct grids
                 if not any(a.shape == b.shape and np.array_equal(a, b) for _, b in chosen):

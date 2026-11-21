@@ -128,9 +128,10 @@ def extract_code(text):
     return code if "def transform" in code else None
 
 
-def chat(model, messages, think, num_ctx, temperature, host):
+def chat(model, messages, think, num_ctx, temperature, host, max_tokens):
+    # num_predict caps reasoning plus answer: without it a long think can fill the context and leave no code
     body = {"model": model, "messages": messages, "stream": False,
-            "options": {"num_ctx": num_ctx, "temperature": temperature}}
+            "options": {"num_ctx": num_ctx, "temperature": temperature, "num_predict": max_tokens}}
     if think:
         body["think"] = think if think in ("low", "medium", "high") else True
     req = urllib.request.Request(f"{host}/api/chat", data=json.dumps(body).encode(),
@@ -141,16 +142,21 @@ def chat(model, messages, think, num_ctx, temperature, host):
 
 
 def solve_task(tid, task, args):
-    """Up to `attempts` fresh conversations, each revised up to `rounds - 1` times; stop at the first pass."""
+    """Up to `attempts` fresh conversations, each revised up to `rounds - 1` times; stop at the first pass.
+
+    Without a pass, the program that got the most demonstrations right (then the fewest cells wrong)
+    supplies fallback predictions, kept apart from the score.
+    """
     train_in = [x for x, _ in task["train"]]
     test_in = [x for x, _ in task["test"]]
-    log, t0 = [], time.perf_counter()
+    log, t0, best = [], time.perf_counter(), None
     for attempt in range(args.attempts):
         messages = [{"role": "system", "content": SYSTEM}, {"role": "user", "content": task_prompt(task)}]
         for rnd in range(args.rounds):
             t = time.perf_counter()
             try:
-                text, n_out, n_in = chat(args.model, messages, args.think, args.num_ctx, args.temperature, args.host)
+                text, n_out, n_in = chat(args.model, messages, args.think, args.num_ctx, args.temperature, args.host,
+                                         args.max_tokens)
             except Exception as e:  # server error or timeout: record it and move on to the next attempt
                 log.append({"attempt": attempt, "round": rnd, "status": "llm_error", "error": str(e)[:300]})
                 break
@@ -170,6 +176,11 @@ def solve_task(tid, task, args):
             if isinstance(outs, list):
                 entry["train_correct"] = sum(not isinstance(o, str) and o.shape == y.shape and np.array_equal(o, y)
                                              for o, (_, y) in zip(outs, task["train"]))
+                wrong = sum(int((o != y).sum()) if not isinstance(o, str) and o.shape == y.shape else y.size
+                            for o, (_, y) in zip(outs, task["train"]))
+                rank = (entry["train_correct"], -wrong)
+                if all(isinstance(p, np.ndarray) for p in outs[len(train_in):]) and (best is None or rank > best[0]):
+                    best = (rank, outs[len(train_in):])
             if msg is None:
                 preds = outs[len(train_in):]
                 entry["status"] = "pass"
@@ -178,17 +189,24 @@ def solve_task(tid, task, args):
             entry["status"] = "fail"
             log.append(entry)
             messages += [{"role": "assistant", "content": f"```python\n{code}```"}, {"role": "user", "content": msg}]
-    return _row(tid, task, log, None, t0)
+    return _row(tid, task, log, None, t0, fallback=best[1] if best else None)
 
 
-def _row(tid, task, log, preds, t0):
-    hits = []
-    for i, (_, y) in enumerate(task["test"]):
-        p = preds[i] if preds else None
-        hits.append(y is not None and not isinstance(p, str) and p is not None and p.shape == y.shape
-                    and bool(np.array_equal(p, y)))
+def _hits(task, preds):
+    return [y is not None and preds is not None and isinstance(preds[i], np.ndarray)
+            and preds[i].shape == y.shape and bool(np.array_equal(preds[i], y))
+            for i, (_, y) in enumerate(task["test"])]
+
+
+def _grids(preds):
+    return [p.tolist() if isinstance(p, np.ndarray) else None for p in preds] if preds else []
+
+
+def _row(tid, task, log, preds, t0, fallback=None):
+    hits, fb_hits = _hits(task, preds), _hits(task, fallback)
     return {"task": tid, "fit_train": preds is not None, "score": sum(hits) / len(hits),
-            "predictions": [p.tolist() if isinstance(p, np.ndarray) else None for p in (preds or [])],
+            "fallback_score": sum(fb_hits) / len(fb_hits),
+            "predictions": _grids(preds), "fallback": _grids(fallback),
             "seconds": round(time.perf_counter() - t0, 1), "log": log}
 
 
@@ -204,6 +222,7 @@ def main():
     ap.add_argument("--think", default="medium", help="gpt-oss: low|medium|high; qwen3: on; '' to disable")
     ap.add_argument("--temperature", type=float, default=0.7)
     ap.add_argument("--num-ctx", type=int, default=32768)
+    ap.add_argument("--max-tokens", type=int, default=16384, help="cap on reasoning plus answer tokens per call")
     ap.add_argument("--max-prompt-chars", type=int, default=40_000, help="skip tasks with longer prompts")
     ap.add_argument("--workers", type=int, default=1, help="concurrent tasks (match Ollama's OLLAMA_NUM_PARALLEL)")
     ap.add_argument("--seed", type=int, default=0)
@@ -234,6 +253,7 @@ def main():
     print(f"{args.split} [{args.tag}]: score {sum(r['score'] for r in rows):.2f}/{len(rows)}  "
           f"fit-train {sum(r['fit_train'] for r in rows)}  "
           f"false positives {sum(r['fit_train'] and r['score'] < 1 for r in rows)}  "
+          f"fallback {sum(r.get('fallback_score', 0) for r in rows):.2f}  "
           f"calls {len(calls)}  mean {np.mean([e['seconds'] for e in calls]):.0f}s/call  "
           f"{np.mean([e['tokens_out'] for e in calls]):.0f} tokens/call")
 

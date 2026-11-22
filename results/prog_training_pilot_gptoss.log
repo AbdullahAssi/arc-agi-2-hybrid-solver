@@ -1,0 +1,22 @@
+20 tasks, 3 already done, 17 to run (0 skipped as too long)
+  63613498: score 1.00  fit True  calls 4  last pass  646s
+  694f12f3: score 1.00  fit True  calls 1  last pass  53s
+  6d75e8bb: score 1.00  fit True  calls 1  last pass  101s
+  72a961c9: score 1.00  fit True  calls 1  last pass  93s
+  834ec97d: score 0.00  fit True  calls 2  last pass  68s
+  84f2aca1: score 1.00  fit True  calls 5  last pass  802s
+  8be77c9e: score 1.00  fit True  calls 1  last pass  7s
+  9b365c51: score 0.00  fit False  calls 6  last fail  931s
+  c9680e90: score 0.00  fit False  calls 6  last no_code  1011s
+  d06dbe63: score 0.00  fit False  calls 6  last no_code  828s
+  server unreachable (HTTP Error 500: Internal Server Error); retrying in 10s
+  db118e2a: score 0.00  fit False  calls 6  last no_code  1023s
+  de493100: score 0.00  fit False  calls 6  last no_code  885s
+  e7a25a18: score 0.00  fit False  calls 6  last fail  909s
+  e7dd8335: score 1.00  fit True  calls 1  last pass  55s
+  ed98d772: score 1.00  fit True  calls 2  last pass  321s
+  fcc82909: score 1.00  fit True  calls 3  last pass  168s
+  server unreachable (Remote end closed connection without response); retrying in 10s
+  fd4b2b02: score 0.00  fit False  calls 6  last fail  974s
+training [pilot_gptoss]: score 10.00/20  fit-train 11  false positives 1  fallback 1.00  calls 78  mean 140s/call  13382 tokens/call
+EXIT 0

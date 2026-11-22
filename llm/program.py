@@ -12,6 +12,7 @@ Usage: python -m llm.program --model gpt-oss:20b --split evaluation --sample 20 
 Appends one JSON line per task to results/prog_<split>_<tag>.jsonl (resumable), then prints a summary.
 """
 import argparse
+import http.client
 import json
 import os
 import random
@@ -19,6 +20,7 @@ import re
 import subprocess
 import sys
 import time
+import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -141,9 +143,17 @@ def chat(model, messages, think, num_ctx, temperature, host, max_tokens):
         body["think"] = think if think in ("low", "medium", "high") else True
     req = urllib.request.Request(f"{host}/api/chat", data=json.dumps(body).encode(),
                                  headers={"Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=1800) as resp:
-        d = json.loads(resp.read())
-    return d["message"].get("content", ""), d.get("eval_count", 0), d.get("prompt_eval_count", 0)
+    # The server may restart mid-run: retry connection failures for up to ~15 minutes before giving up
+    for wait in [10, 20, 30, 60, 120, 240, 420, 0]:
+        try:
+            with urllib.request.urlopen(req, timeout=1800) as resp:
+                d = json.loads(resp.read())
+            return d["message"].get("content", ""), d.get("eval_count", 0), d.get("prompt_eval_count", 0)
+        except (ConnectionError, urllib.error.URLError, http.client.HTTPException) as e:
+            if not wait:
+                raise
+            print(f"  server unreachable ({e}); retrying in {wait}s", flush=True)
+            time.sleep(wait)
 
 
 def solve_task(tid, task, args):
@@ -240,6 +250,10 @@ def main():
         ids = sorted(random.Random(args.seed).sample(ids, args.sample))
     out = RESULTS / f"prog_{args.split}_{args.tag}.jsonl"
     RESULTS.mkdir(exist_ok=True)
+    if out.exists():  # resume; unsolved tasks cut short by an unreachable server are run again in full
+        kept = [line for line in out.open()
+                if (r := json.loads(line))["fit_train"] or all(e["status"] != "llm_error" for e in r["log"])]
+        out.write_text("".join(kept))
     done = {json.loads(line)["task"] for line in out.open()} if out.exists() else set()
     todo = [t for t in ids if t not in done and len(task_prompt(tasks[t])) <= args.max_prompt_chars]
     print(f"{len(ids)} tasks, {len(done & set(ids))} already done, {len(todo)} to run "

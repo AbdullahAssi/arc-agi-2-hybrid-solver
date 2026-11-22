@@ -1,0 +1,23 @@
+20 tasks, 0 already done, 20 to run (0 skipped as too long)
+  11dc524f: score 0.00  fit False  calls 6  last fail  914s
+  484b58aa: score 0.00  fit False  calls 6  last fail  934s
+  543a7ed5: score 1.00  fit True  calls 3  last pass  230s
+  63613498: score 0.00  fit False  calls 4  last llm_error  350s
+  694f12f3: score 0.00  fit False  calls 2  last llm_error  0s
+  6d75e8bb: score 0.00  fit False  calls 2  last llm_error  0s
+  72a961c9: score 0.00  fit False  calls 2  last llm_error  0s
+  834ec97d: score 0.00  fit False  calls 2  last llm_error  0s
+  84f2aca1: score 0.00  fit False  calls 2  last llm_error  0s
+  8be77c9e: score 0.00  fit False  calls 2  last llm_error  0s
+  9b365c51: score 0.00  fit False  calls 2  last llm_error  0s
+  c9680e90: score 0.00  fit False  calls 2  last llm_error  0s
+  d06dbe63: score 0.00  fit False  calls 2  last llm_error  0s
+  db118e2a: score 0.00  fit False  calls 2  last llm_error  0s
+  de493100: score 0.00  fit False  calls 2  last llm_error  0s
+  e7a25a18: score 0.00  fit False  calls 2  last llm_error  0s
+  e7dd8335: score 0.00  fit False  calls 2  last llm_error  0s
+  ed98d772: score 0.00  fit False  calls 2  last llm_error  0s
+  fcc82909: score 0.00  fit False  calls 2  last llm_error  0s
+  fd4b2b02: score 0.00  fit False  calls 2  last llm_error  0s
+training [pilot_gptoss]: score 1.00/20  fit-train 1  false positives 0  fallback 0.00  calls 18  mean 130s/call  12630 tokens/call
+EXIT 0

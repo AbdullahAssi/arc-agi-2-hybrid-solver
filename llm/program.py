@@ -3,7 +3,9 @@ every demonstration exactly, then apply it to the test inputs.
 
 Unlike the fine-tuned grid model, a candidate here is checked from outside the model: a program
 that gets any demonstration wrong is discarded, however confident the model was. A failed program
-is sent back once per round with the first mismatch, so the model can revise it.
+is sent back once per round with the first mismatch, so the model can revise it. A call whose
+reasoning hits the token cap before any code gets a short follow-up that hands back the tail of that
+reasoning and demands code (budget forcing), so the reasoning is not wasted.
 
 Talks to Ollama (http://localhost:11434). Generated code runs in a separate process with a timeout
 and a memory cap, but is not otherwise sandboxed: only use on a machine you control.
@@ -42,6 +44,9 @@ def transform(grid: list[list[int]]) -> list[list[int]]:
 
 The function must work for all the examples and for the new test inputs, which may differ in size.
 You may import numpy (as np) and the Python standard library. Answer with one ```python code block."""
+
+FORCE = ("Stop analysing. Commit to the most plausible rule from your analysis and write transform() now, "
+         "as one ```python code block.")
 
 # Runs untrusted generated code: reads {"code", "inputs"} on stdin, prints outputs or the error per input.
 RUNNER = r"""
@@ -148,7 +153,8 @@ def chat(model, messages, think, num_ctx, temperature, host, max_tokens):
         try:
             with urllib.request.urlopen(req, timeout=1800) as resp:
                 d = json.loads(resp.read())
-            return d["message"].get("content", ""), d.get("eval_count", 0), d.get("prompt_eval_count", 0)
+            return (d["message"].get("content", ""), d["message"].get("thinking") or "",
+                    d.get("eval_count", 0), d.get("prompt_eval_count", 0))
         except (ConnectionError, urllib.error.URLError, http.client.HTTPException) as e:
             if not wait:
                 raise
@@ -169,14 +175,23 @@ def solve_task(tid, task, args):
         messages = [{"role": "system", "content": SYSTEM}, {"role": "user", "content": task_prompt(task)}]
         for rnd in range(args.rounds):
             t = time.perf_counter()
+            forced = False
             try:
-                text, n_out, n_in = chat(args.model, messages, args.think, args.num_ctx, args.temperature, args.host,
-                                         args.max_tokens)
+                text, thinking, n_out, n_in = chat(args.model, messages, args.think, args.num_ctx, args.temperature,
+                                                   args.host, args.max_tokens)
+                if extract_code(text) is None and thinking and args.force_tokens:
+                    # Budget forcing: the reasoning ran out before any code; hand back its tail and demand code now
+                    forced = True
+                    text, _, n2, _ = chat(args.model, messages + [
+                        {"role": "assistant", "content": f"My analysis so far (cut off):\n...{thinking[-args.force_context:]}"},
+                        {"role": "user", "content": FORCE}], "low", args.num_ctx, args.temperature, args.host,
+                        args.force_tokens)
+                    n_out += n2
             except Exception as e:  # server error or timeout: record it and move on to the next attempt
                 log.append({"attempt": attempt, "round": rnd, "status": "llm_error", "error": str(e)[:300]})
                 break
             entry = {"attempt": attempt, "round": rnd, "seconds": round(time.perf_counter() - t, 1),
-                     "tokens_out": n_out, "tokens_in": n_in}
+                     "tokens_out": n_out, "tokens_in": n_in, "forced": forced}
             code = extract_code(text)
             if code is None:
                 entry["status"] = "no_code"
@@ -238,6 +253,9 @@ def main():
     ap.add_argument("--temperature", type=float, default=0.7)
     ap.add_argument("--num-ctx", type=int, default=32768)
     ap.add_argument("--max-tokens", type=int, default=16384, help="cap on reasoning plus answer tokens per call")
+    ap.add_argument("--force-tokens", type=int, default=4096,
+                    help="when a call ends without code, a follow-up of this many tokens demands it (0 = off)")
+    ap.add_argument("--force-context", type=int, default=12_000, help="characters of cut-off reasoning handed back")
     ap.add_argument("--max-prompt-chars", type=int, default=40_000, help="skip tasks with longer prompts")
     ap.add_argument("--workers", type=int, default=1, help="concurrent tasks (match Ollama's OLLAMA_NUM_PARALLEL)")
     ap.add_argument("--seed", type=int, default=0)
@@ -273,7 +291,9 @@ def main():
           f"fit-train {sum(r['fit_train'] for r in rows)}  "
           f"false positives {sum(r['fit_train'] and r['score'] < 1 for r in rows)}  "
           f"fallback {sum(r.get('fallback_score', 0) for r in rows):.2f}  "
-          f"calls {len(calls)}  mean {np.mean([e['seconds'] for e in calls]):.0f}s/call  "
+          f"calls {len(calls)} (forced {sum(e.get('forced', False) for e in calls)}, "
+          f"no code {sum(e['status'] == 'no_code' for e in calls)})  "
+          f"mean {np.mean([e['seconds'] for e in calls]):.0f}s/call  "
           f"{np.mean([e['tokens_out'] for e in calls]):.0f} tokens/call")
 
 

@@ -1,0 +1,25 @@
+20 tasks, 0 already done, 20 to run (0 skipped as too long)
+  16b78196: score 0.00  fit False  calls 6  last fail  703s
+  38007db0: score 0.00  fit False  calls 6  last fail  619s
+  45a5af55: score 0.00  fit True  calls 5  last pass  492s
+  4e34c42c: score 0.00  fit False  calls 6  last fail  616s
+  5dbc8537: score 0.00  fit False  calls 6  last fail  578s
+  67e490f4: score 0.00  fit False  calls 6  last fail  485s
+  server unreachable (HTTP Error 500: Internal Server Error); retrying in 10s
+  6e4f6532: score 0.00  fit False  calls 6  last fail  794s
+  71e489b6: score 0.00  fit False  calls 6  last fail  796s
+  7c66cb00: score 0.00  fit False  calls 6  last fail  758s
+  server unreachable (Remote end closed connection without response); retrying in 10s
+  7ed72f31: score 0.00  fit False  calls 6  last fail  886s
+  8698868d: score 0.00  fit False  calls 6  last fail  809s
+  8f3a5a89: score 0.00  fit False  calls 6  last fail  714s
+  cb2d8a2c: score 0.00  fit False  calls 6  last fail  559s
+  d59b0160: score 0.00  fit False  calls 6  last fail  817s
+  dd6b8c4b: score 0.00  fit False  calls 6  last fail  1079s
+  dfadab01: score 0.00  fit False  calls 6  last fail  561s
+  e87109e9: score 0.00  fit False  calls 6  last no_code  869s
+  edb79dae: score 0.00  fit False  calls 6  last fail  543s
+  f560132c: score 0.00  fit False  calls 6  last fail  750s
+  f931b4a8: score 0.00  fit False  calls 6  last fail  504s
+evaluation [pilot_gptoss_force]: score 0.00/20  fit-train 1  false positives 1  fallback 0.00  calls 119 (forced 57, no code 3)  mean 117s/call  11113 tokens/call
+EXIT 0

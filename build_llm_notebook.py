@@ -27,7 +27,10 @@ the two most-voted grids become attempts 1 and 2.
 | `1.7B per-task TTT` | the 1.7B adapter + a separate adapter per task (as `per-task TTT`), rescored |
 | `1.7B sampled` | as `1.7B per-task TTT`, plus 4 sampled answers per view (temperature 0.7); the top 12 candidates are rescored |
 
-All scores are on the 120-task public **evaluation** split. No model saw its test outputs; only the
+Section 8 compares ways of ranking the sampled candidates, and section 9 tries a different generator:
+a 20B reasoning model that writes Python programs, checked against the demonstrations.
+
+Unless marked otherwise, scores are on the 120-task public **evaluation** split. No model saw its test outputs; only the
 test-time-trained adapter saw its demonstration pairs, which every solver is given anyway.
 """)
 
@@ -240,7 +243,168 @@ for _, r in near.iterrows():
     show(r["task"], r["test"], last, f"Near miss {r['task']}: {r['cell_acc']:.0%} of cells right ({r['category']})")
 ''')
 
-findings = Path(sys.argv[2]).read_text() if len(sys.argv) > 2 else "## 8. Findings\n\n_Written once the results are in._"
+md("""
+## 8. Choosing among candidates
+
+The 1.7B sampled run was repeated with every candidate rescored (up to 40 per test input) and the
+whole pool saved (`infer --pool`), so rankers can be compared offline. A summed log-probability
+might favour small grids, since every extra cell adds a negative term; per-token scores and an
+implied-shape filter test that.
+""")
+code("""
+from llm.rank import RANKERS, rank, implied_shape, n_tokens
+
+pool = json.loads((RES / "llm_pool_evaluation_ttt_task_pool_q17.json").read_text())
+n_tests = pd.Series([r["task"] for r in pool]).value_counts()
+in_pool = [r for r in pool if any(c["correct"] for c in r["candidates"])]
+rows = [{"ranker": "oracle (correct anywhere in the pool)",
+         "score": sum(1 / n_tests[r["task"]] for r in in_pool), "rank of correct": "-"}]
+for use_shape in (False, True):
+    for name, key in RANKERS.items():
+        score, ranks = 0.0, []
+        for r in pool:
+            order = rank(r["candidates"], key, implied_shape(eval_tasks[r["task"]], r["test"]) if use_shape else None)
+            score += any(c["correct"] for c in order[:2]) / n_tests[r["task"]]
+            if r in in_pool:
+                ranks.append(next(i for i, c in enumerate(order, 1) if c["correct"]))
+        rows.append({"ranker": name + (" + implied shape" if use_shape else ""), "score": score,
+                     "rank of correct": ", ".join(map(str, ranks))})
+print(f"{len(pool)} test inputs, {sum(len(r['candidates']) for r in pool)} candidates; "
+      f"correct grid in the pool for {len(in_pool)}: {', '.join(r['task'] for r in in_pool)}")
+display(pd.DataFrame(rows).set_index("ranker"))
+
+fig, axes = plt.subplots(1, len(in_pool), figsize=(6.5 * len(in_pool), 3.8), squeeze=False)
+for ax, r in zip(axes[0], in_pool):
+    cands = sorted(r["candidates"], key=lambda c: -sum(c["logprobs"]))[:15]
+    per_tok = [np.mean(c["logprobs"]) / n_tokens(np.array(c["grid"]).shape) for c in cands]
+    ax.bar(range(1, len(cands) + 1), per_tok, color=[INK if c["correct"] else SERIES[0] for c in cands], width=0.7)
+    ax.set(xlabel="candidate, ranked by summed log-probability", ylabel="log-probability per token")
+    ax.set_title(f"{r['task']}: the correct grid (dark) is not the model's favourite", loc="left")
+plt.tight_layout(); plt.show()
+""")
+
+md("""
+## 9. Program synthesis with a 20B reasoning model
+
+A different generator: `gpt-oss:20b` (run locally with Ollama) writes a Python `transform(grid)`,
+which is kept only if it reproduces every demonstration exactly; a failed program goes back with
+its first mismatch for revision (2 conversations x 3 rounds per task). The demonstrations act as
+a check from outside the model, which the grid model's own likelihood could not provide (section 8).
+Pilots on 20 random tasks per split (`llm/program.py`):
+
+| Pilot | Reasoning | Notes |
+|---|---|---|
+| training, think medium | medium | 16k-token cap per call; a call that hits it yields no code |
+| evaluation, think low | low | short reasoning |
+| evaluation, think medium + forcing | medium | a call that hits the cap is handed back its reasoning and must write code (budget forcing) |
+""")
+code("""
+from llm.program import run_program
+
+PROG = {"training, think medium": ("training", "prog_training_pilot_gptoss"),
+        "evaluation, think low": ("evaluation", "prog_evaluation_pilot_gptoss_low"),
+        "evaluation, think medium + forcing": ("evaluation", "prog_evaluation_pilot_gptoss_force")}
+splits = {"training": load_split("training"), "evaluation": eval_tasks}
+prog = {name: (split, [json.loads(l) for l in (RES / f"{f}.jsonl").open()])
+        for name, (split, f) in PROG.items() if (RES / f"{f}.jsonl").exists()}
+dsl_train = {r["task"]: r["score"] for r in json.loads((RES / "training_v2_uniform.json").read_text())["tasks"]}
+
+summary = {}
+for name, (split, rows) in prog.items():
+    calls = [e for r in rows for e in r["log"] if "seconds" in e]
+    summary[name] = {
+        "tasks": len(rows), "solved": sum(r["score"] for r in rows),
+        "DSL on the same tasks": sum(dsl_train.get(r["task"], 0) for r in rows) if split == "training" else 0,
+        "passed all demos": sum(r["fit_train"] for r in rows),
+        "false positives": sum(r["fit_train"] and r["score"] < 1 for r in rows),
+        "fallback solves": sum(r.get("fallback_score", 0) for r in rows),
+        "calls": len(calls), "no code %": 100 * np.mean([e["status"] == "no_code" for e in calls]),
+        "forced": sum(e.get("forced", False) for e in calls),
+        "s / call": np.mean([e["seconds"] for e in calls]), "tokens / call": np.mean([e["tokens_out"] for e in calls]),
+    }
+display(pd.DataFrame(summary).T.round(1))
+
+fig, ax = plt.subplots(figsize=(10, 2.8))
+outcomes = [("pass", SERIES[2]), ("fail", SERIES[0]), ("no_code", SERIES[1]), ("llm_error", GRID)]
+for i, (name, (_, rows)) in enumerate(prog.items()):
+    statuses = [e["status"] for r in rows for e in r["log"]]
+    left = 0
+    for status, color in outcomes:
+        share = 100 * statuses.count(status) / len(statuses)
+        ax.barh(i, share, left=left, color=color, height=0.6, label=status.replace("_", " ") if i == 0 else None)
+        left += share
+ax.set_yticks(range(len(prog)), list(prog)); ax.invert_yaxis(); ax.set_xlabel("% of calls")
+ax.set_title("What each call produced", loc="left")
+ax.legend(frameon=False, ncol=4, loc="lower center", bbox_to_anchor=(0.5, 1.12))
+plt.tight_layout(); plt.show()
+""")
+code("""
+def demo_accuracy(task, code):
+    \"\"\"Mean share of cells right over the demonstrations (0 for a wrong-size or failed output).\"\"\"
+    outs = run_program(code, [x for x, _ in task["train"]])
+    if isinstance(outs, str):
+        return 0.0
+    return float(np.mean([(o == y).mean() if not isinstance(o, str) and o.shape == y.shape else 0.0
+                          for o, (_, y) in zip(outs, task["train"])]))
+
+
+def copy_accuracy(task):
+    return float(np.mean([(x == y).mean() if x.shape == y.shape else 0.0 for x, y in task["train"]]))
+
+
+# Re-runs every saved program on its demonstrations (a minute or two)
+closeness = []
+for name, (split, rows) in prog.items():
+    if "low" in name:
+        continue
+    for r in rows:
+        task = splits[split][r["task"]]
+        best = max([demo_accuracy(task, e["code"]) for e in r["log"] if "code" in e], default=0.0)
+        closeness.append({"pilot": name, "task": r["task"], "best program": best, "copy input": copy_accuracy(task),
+                          "solved": r["score"] > 0})
+closeness = pd.DataFrame(closeness)
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 4.2), sharey=True)
+for ax, (name, g) in zip(axes, closeness.groupby("pilot", sort=False)):
+    ax.plot([0, 1], [0, 1], color=GRID, linewidth=1.5, zorder=1)
+    for solved, color, label in [(False, SERIES[0], "unsolved"), (True, SERIES[2], "solved")]:
+        s = g[g["solved"] == solved]
+        ax.scatter(s["copy input"], s["best program"], s=60, color=color, edgecolor="#fcfcfb", linewidth=1.5,
+                   zorder=2, label=label)
+    ax.set(xlabel="demo cells right by copying the input", xlim=(-0.03, 1.03), ylim=(-0.03, 1.03))
+    ax.set_title(name, loc="left")
+axes[0].set_ylabel("demo cells right, best program")
+axes[0].legend(frameon=False, loc="lower right")
+fig.suptitle("Best program per task against copying the input (above the line = better than copying)", x=0.01, ha="left")
+plt.tight_layout(); plt.show()
+unsolved = closeness[~closeness["solved"]]
+display(unsolved.groupby("pilot", sort=False).agg(
+    unsolved=("task", "size"), best_at_least_90pct=("best program", lambda s: int((s >= 0.9).sum())),
+    beats_copying=("best program", lambda s: int((s > unsolved.loc[s.index, "copy input"]).sum())),
+    never_right_size=("best program", lambda s: int((s == 0).sum()))))
+""")
+code('''
+def show_program(split, row, title):
+    task = splits[split][row["task"]]
+    passing = next(e for e in row["log"] if e["status"] == "pass")
+    pairs = task["train"][:2] + [(task["test"][0][0], np.array(row["predictions"][0]))]
+    fig, axes = plt.subplots(1, 2 * len(pairs), figsize=(2.2 * 2 * len(pairs), 2.6))
+    labels = [f"demo {i + 1} {s}" for i in range(len(pairs) - 1) for s in ("in", "out")] + ["test in", "program's answer"]
+    for ax, g, label in zip(axes, [g for p in pairs for g in p], labels):
+        ax.imshow(g, cmap=ARC_CMAP, vmin=0, vmax=9)
+        ax.set_xticks([]); ax.set_yticks([]); ax.grid(False); ax.set_title(label, fontsize=9)
+    fig.suptitle(title, x=0.01, ha="left")
+    plt.tight_layout(); plt.show()
+    print(passing["code"])
+
+
+split, rows = prog["training, think medium"]
+solved = [r for r in rows if r["score"] > 0]
+pick = max(solved, key=lambda r: len(r["log"]))  # the one that needed the most revisions
+show_program(split, pick, f"Solved {pick['task']} after {len(pick['log'])} calls (training split)")
+''')
+
+findings = Path(sys.argv[2]).read_text() if len(sys.argv) > 2 else "## 10. Findings\n\n_Written once the results are in._"
 md(findings)
 
 nb = nbf.v4.new_notebook()

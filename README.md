@@ -4,16 +4,19 @@ A from-scratch attempt at [ARC-AGI-2](https://arcprize.org/arc-agi/2/), the abst
 benchmark where each task gives 2–5 example input/output grids and asks for the output of a new input.
 Scoring is exact match with two attempts per test input.
 
-The project combines two approaches that fail in different ways:
+The project compares three approaches that fail in different ways:
 
 1. **A program-synthesis solver:** best-first search over a 55-primitive grid DSL, guided by a
    neural prior that predicts which primitives a task needs.
 2. **An LLM solver:** Qwen3-0.6B and then Qwen3-1.7B, fine-tuned with LoRA on grids written as
    text (plus RE-ARC generated tasks for 1.7B), then trained again at test time on each task's own
    examples, with augmentation voting and likelihood re-ranking.
+3. **LLM-written programs:** a local 20B reasoning model (`gpt-oss:20b`) writes a Python
+   `transform(grid)`, which is kept only if it reproduces every example exactly, with feedback
+   rounds for failed programs.
 
-The combined solver uses the DSL's answer whenever one of its programs fits every example, and the
-LLM's answer otherwise.
+The combined solver uses the DSL's answer whenever one of its programs fits every example, then an
+LLM-written program that fits every example, then the grid LLM's answer.
 
 ## Results
 
@@ -27,13 +30,14 @@ LLM's answer otherwise.
 | LLM 1.7B + RE-ARC data, + per-task test-time training | – | 0 (closest: 1 of 175 cells wrong) |
 | LLM 1.7B, + 4 sampled answers per view | – | 0 (correct grid among candidates for 1 of 167 tests) |
 | LLM 1.7B, every candidate rescored, 5 rankers compared | – | 0 (perfect ranker: 1.5) |
-| **Combined (DSL first, then LLM)** | – | **0.5** |
+| **LLM-written programs, gpt-oss:20b** (20-task pilots) | **10/20** (DSL: 2/20 on the same tasks) | 0/20 |
+| **Combined (DSL, then LLM-written programs, then grid LLM)** | – | **0.5** |
 
-The LLM was trained on the training split, so it is scored on the evaluation split only. The
-evaluation split is ARC-AGI-2's public evaluation set; no model ever saw its test outputs.
+The fine-tuned LLM was trained on the training split, so it is scored on the evaluation split only.
+The evaluation split is ARC-AGI-2's public evaluation set; no model ever saw its test outputs.
 
-These are small numbers: ARC-AGI-2 was designed to resist brute-force search, and the LLM here is a
-0.6B model trained on one GPU. The project's value is in *why* each piece stalls:
+These are small numbers: ARC-AGI-2 was designed to resist brute-force search, and every model here
+runs on one 24 GB GPU. The project's value is in *why* each piece stalls:
 
 - **The DSL is limited by what it can express, not by search.** The learned prior finds solutions
   after a median of 3 nodes instead of 34, yet solves exactly the same tasks; depth-4 programs add
@@ -58,7 +62,14 @@ These are small numbers: ARC-AGI-2 was designed to resist brute-force search, an
   favours small grids, every candidate was rescored and five rankers compared offline. None helps:
   normalised per token, the correct grids still rank 4th and 14th, below answers 2–8 cells away. A
   perfect ranker would reach only 1.5/120, so generating the right answer at all (2 of 167 test
-  inputs) is the bigger bottleneck. Details:
+  inputs) is the bigger bottleneck.
+- **Programs checked against the examples are the strongest approach, up to the model's reasoning
+  limit.** Running the code on the examples is the outside check the grid model lacked: on 20
+  training tasks, 11 programs passed and 10 of those were right on the test, against 2 solves for
+  the DSL on the same tasks. On 20 evaluation tasks no program reproduces even one example of 19
+  of them; the best programs beat copying the input by only a few points. With low reasoning the
+  model gives up ("maybe identity?"); with medium reasoning it runs past the token budget, fixed by
+  budget forcing (handing back its reasoning and demanding code). Details:
   [llm_findings.md](llm_findings.md), [llm_analysis.ipynb](llm_analysis.ipynb).
 
 ## Layout
@@ -79,8 +90,9 @@ llm/               LLM solver
   ttt.py           per-task test-time training: one adapter per task
   infer.py         vLLM inference, augmentation voting, optional likelihood rescoring (--pool saves all candidates)
   rank.py          offline comparison of rankers on a saved candidate pool
+  program.py       LLM-written programs via Ollama, checked against the examples, with revision and budget forcing
 run_vllm.sh        environment wrapper for vLLM
-combine.py         DSL + LLM -> Kaggle-format submission.json
+combine.py         DSL + LLM-written programs + LLM -> Kaggle-format submission.json
 analyze.py, build_notebook.py, build_llm_notebook.py, taskstats.py   analysis and notebooks
 results/           every run's JSON and logs
 ```
@@ -109,9 +121,14 @@ bash run_vllm.sh --model Qwen/Qwen3-1.7B --adapter models/lora_q17 --adapter-dir
 bash run_vllm.sh --model Qwen/Qwen3-1.7B --adapter models/lora_q17 --adapter-dir models/ttt_tasks_q17 --samples 4 --rescore 40 --pool --tag ttt_task_pool_q17  # ~3 h
 python -m llm.rank results/llm_pool_evaluation_ttt_task_pool_q17.json
 
+# LLM-written programs (needs an Ollama server with gpt-oss:20b on localhost:11434; ~15 min per task)
+python -m llm.program --split training --sample 20 --attempts 2 --rounds 3 --think medium --tag pilot_gptoss
+python -m llm.program --split evaluation --sample 20 --attempts 2 --rounds 3 --think medium --tag pilot_gptoss_force
+
 # Combine and write a submission
 python combine.py --dsl results/evaluation_v2_uniform.json \
-                  --llm results/llm_evaluation_ttt_task_q06.json --out results/submission_evaluation.json
+                  --llm results/llm_evaluation_ttt_task_q06.json \
+                  --prog results/prog_evaluation_pilot_gptoss_force.jsonl --out results/submission_evaluation.json
 ```
 
 Environments: the DSL needs numpy, scikit-learn and joblib. Training needs torch, transformers and
@@ -119,7 +136,10 @@ peft. Inference needs vLLM, kept in a separate environment because its torch bui
 
 ## Where it would go next
 
-- **The LLM side:** generating the right answer more often comes first: larger models (4–8B) and
+- **LLM-written programs:** the check against the examples works; the generator is the limit. A
+  stronger reasoning model, or many more samples per task with parallel requests, and a full
+  training-split run with budget forcing for a firmer number than a 20-task pilot.
+- **The grid LLM:** generating the right answer more often comes first: larger models (4–8B) and
   far more generated data, which is the scale published LLM approaches use. Ranking needs a signal
   from outside the model's likelihood, since size normalisation and shape filters did not help.
 - **The DSL side:** object-wise combinators ("apply f to each object") and primitives parameterised

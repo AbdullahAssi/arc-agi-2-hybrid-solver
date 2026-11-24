@@ -1,4 +1,4 @@
-## 8. Findings
+## 10. Findings
 
 | | zero-shot | fine-tuned | + shared TTT | + per-task TTT | per-task, rescored | per-task v2 (rescored) | 1.7B fine-tuned (+RE-ARC) | 1.7B per-task (rescored) | 1.7B + sampling |
 |---|---|---|---|---|---|---|---|---|---|
@@ -102,14 +102,46 @@ candidates a few cells apart its likelihood carries almost no signal. Better ran
 reach at most 1.5/120 here; generation, which got the right answer into the pool for 2 of 167
 inputs, is the larger bottleneck.
 
+**12. A 20B model writing programs solves half the training tasks but no evaluation tasks.** A
+different generator: `gpt-oss:20b`, run locally with Ollama, writes a Python `transform(grid)`; the
+program is kept only if it reproduces every demonstration exactly, and a failed one goes back with
+its first mismatch for revision (2 conversations x 3 rounds per task; `llm/program.py`). Running
+the code on the demonstrations is the check from outside the model that finding 11 found missing.
+Pilots on 20 random tasks per split (section 9):
+
+| Pilot | Solved | DSL, same tasks | Passed all demos | Calls without code | Time per call |
+|---|---|---|---|---|---|
+| training, think medium | **10/20** | 2/20 | 11 (1 wrong on test) | 56% | 140 s |
+| evaluation, think low | 0/20 | 0 | 0 | 38% | 6 s |
+| evaluation, think medium + forcing | 0/20 | 0 | 1 (wrong on test) | 2.5% | 117 s |
+
+On training tasks it is the strongest solver in the project: 5x the DSL on the same tasks, solving
+both of the DSL's tasks, four of them only after feedback rounds, and it reached that score while
+over half its calls produced nothing (medium reasoning ran past the 16k-token cap). On evaluation
+it solves nothing. With low reasoning the model gives up within ~500 tokens (on `dfadab01`: "Hard.
+Given limited time, maybe identity?") and returns the input unchanged. With medium reasoning plus
+budget forcing (a call that hits the cap is handed back the tail of its reasoning and must write
+code), almost every call produces a program, but no program reproduces even one demonstration of
+19 of the 20 tasks. The best program for 12 of 20 tasks beats copying the input, mostly by a few
+points: the programs get the easy cells and miss the rule. The one program that passed (`45a5af55`)
+fitted only 2 demonstrations and returned a 23x23 grid for a 26x26 answer, showing how few
+demonstrations limit this check.
+
+Two infrastructure bugs cost runs and are worth recording: under the runner's memory cap, `import
+numpy` hung on the 112-core server (OpenBLAS reserves memory per core) until the timeout, silently
+failing every program that used numpy; and the Ollama container was stopped mid-run, which now
+triggers retries instead of empty results.
+
 ### What this suggests next
 Every step has moved the answers closer, but none has crossed into exact answers: ARC scores only
 grids with every cell right, and the last 1–10 cells are exactly the ones the rule changes.
+- **Program synthesis is the approach to scale:** checking candidates against the demonstrations
+  works (11 passes on training, 1 wrong), but the generator has to find the rule first. That
+  needs a stronger reasoning model than a local 20B one, or many more samples per task with
+  parallel requests; the training pilot should also be rerun with budget forcing for a fair number.
 - **Ranking needs a signal other than the model's own likelihood:** size normalisation and shape
-  filters were tried and do not help (finding 11). What remains is a check from outside the model,
-  such as having the DSL test whether a candidate is consistent with a transformation that also
-  reproduces the demo outputs. Even a perfect ranker reaches only 1.5/120 here, though, so this is
-  worth doing only alongside better generation.
+  filters were tried and do not help (finding 11). Even a perfect ranker reaches only 1.5/120
+  here, so this is worth doing only alongside better generation.
 - **Larger models and far more data:** published LLM approaches use 4–8B models trained on
   hundreds of thousands of RE-ARC-style examples, against 1.7B and 20k here.
 - **Combine with the DSL:** the DSL is exact when one of its programs fits; the LLM's strength so far

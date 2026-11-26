@@ -18,6 +18,11 @@ The project compares three approaches that fail in different ways:
 The combined solver uses the DSL's answer whenever one of its programs fits every example, then an
 LLM-written program that fits every example, then the grid LLM's answer.
 
+![A training task solved by an LLM-written program](docs/solved_example_84f2aca1.png)
+*A training task (`84f2aca1`) solved by a program that `gpt-oss:20b` wrote on its fifth call: fill
+each shape's hole with grey if it is a single cell and with orange if it is larger. The program
+reproduced both examples before it was trusted with the test input.*
+
 ## Results
 
 | Solver | Training split (1000) | Evaluation split (120) |
@@ -72,6 +77,20 @@ runs on one 24 GB GPU. The project's value is in *why* each piece stalls:
   budget forcing (handing back its reasoning and demanding code). Details:
   [llm_findings.md](llm_findings.md), [llm_analysis.ipynb](llm_analysis.ipynb).
 
+## In pictures
+
+![Held-out tasks solved within a given search budget](docs/prior_search_budget.png)
+*Held-out training tasks solved within a given search budget. With the learned prior (dream, wake)
+the DSL reaches its tasks after a handful of nodes instead of dozens, but every variant ends at the
+same 15 tasks: search speed is not what limits it.*
+
+![Best LLM-written program per task against copying the input](docs/programs_vs_copying.png)
+*Best LLM-written program per task, measured on the examples, against simply copying the input. On
+training tasks (left) half the tasks are solved (green, at 1.0); on evaluation tasks (right) the programs
+sit just above the copy line: they get the easy cells right and miss the rule.*
+
+More figures are in [analysis.ipynb](analysis.ipynb) (DSL) and [llm_analysis.ipynb](llm_analysis.ipynb) (LLMs).
+
 ## Layout
 
 ```
@@ -95,6 +114,7 @@ run_vllm.sh        environment wrapper for vLLM
 combine.py         DSL + LLM-written programs + LLM -> Kaggle-format submission.json
 analyze.py, build_notebook.py, build_llm_notebook.py, taskstats.py   analysis and notebooks
 results/           every run's JSON and logs
+docs/              figures used in this README (exported from the notebooks)
 ```
 
 ## Reproducing
